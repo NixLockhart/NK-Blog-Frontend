@@ -1,0 +1,35 @@
+# 星光小栈 robots.txt
+# https://nixstudio.cn
+
+# 允许所有搜索引擎抓取
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# 360搜索蜘蛛
+User-agent: 360Spider
+Allow: /
+
+# 百度蜘蛛
+User-agent: Baiduspider
+Allow: /
+
+# 谷歌蜘蛛
+User-agent: Googlebot
+Allow: /
+
+# 必应蜘蛛
+User-agent: Bingbot
+Allow: /
+
+# 搜狗蜘蛛
+User-agent: Sogou web spider
+Allow: /
+
+# 神马蜘蛛（移动搜索）
+User-agent: YisouSpider
+Allow: /
+
+# 抓取延迟（秒）- 避免对服务器造成压力
+Crawl-delay: 1
