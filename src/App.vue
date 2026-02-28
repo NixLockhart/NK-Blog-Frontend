@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <!-- 跳过导航链接（无障碍） -->
+    <a href="#main-content" class="skip-to-content">跳到主要内容</a>
+
     <!-- 头部（固定在顶部） -->
     <Header />
 
@@ -10,7 +13,7 @@
     <Announcement />
 
     <!-- 主内容区 -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -24,9 +27,7 @@
     <!-- 回到顶部按钮 -->
     <transition name="fade">
       <button v-if="showBackToTop" class="back-to-top" @click="scrollToTop" title="回到顶部">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
+        <Icon name="chevron-up" :size="24" />
       </button>
     </transition>
 
@@ -45,6 +46,7 @@ import Header from '@/components/layout/Header.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Announcement from '@/components/layout/Announcement.vue'
 import { AIAssistant } from '@/components/ai-assistant'
+import Icon from '@/components/common/Icon.vue'
 
 const themeStore = useThemeStore()
 const appStore = useAppStore()
@@ -90,9 +92,28 @@ onUnmounted(() => {
   width: 100%;
 }
 
+.skip-to-content {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  padding: var(--spacing-sm) var(--spacing-base);
+  background-color: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: var(--radius-base);
+  font-weight: 500;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: var(--spacing-sm);
+}
+
 /* 为固定导航栏留出空间的占位元素 */
 .header-placeholder {
-  height: 64px; /* 导航栏高度 */
+  height: var(--header-height);
 }
 
 .main-content {

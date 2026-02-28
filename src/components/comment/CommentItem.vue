@@ -1,7 +1,7 @@
 <template>
   <div class="comment-item">
     <div class="comment-header">
-      <img :src="getAvatarUrl(comment.avatar, defaultAvatar)" :alt="comment.nickname" class="comment-avatar" />
+      <img :src="getAvatarUrl(comment.avatar, defaultAvatar)" :alt="comment.nickname" class="comment-avatar" width="40" height="40" />
       <div class="comment-info">
         <span class="comment-author">{{ comment.nickname }}</span>
         <span class="comment-time">{{ formatTime(comment.createdAt) }}</span>

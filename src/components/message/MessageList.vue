@@ -6,9 +6,7 @@
     <!-- 留言区标题 -->
     <div class="messages-header">
       <h3 class="messages-section-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
+        <Icon name="comment" :size="18" />
         全部留言
       </h3>
       <span v-if="totalCount > 0" class="messages-count">{{ totalCount }} 条</span>
@@ -19,9 +17,7 @@
       <div class="loading-spinner-lg"></div>
     </div>
     <div v-else-if="messages.length === 0" class="empty-state">
-      <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
+      <Icon name="comment" :size="48" class="empty-icon" />
       <p>还没有留言，快来抢沙发吧!</p>
     </div>
     <div v-else class="messages-container" ref="messagesContainer" @scroll="handleScroll">
@@ -45,6 +41,8 @@
             :src="message.avatar ? getAvatarUrl(message.avatar) : defaultAvatar"
             :alt="message.nickname"
             class="message-avatar"
+            width="36"
+            height="36"
           />
           <div class="message-bubble">
             <div class="message-bubble-header">
@@ -66,6 +64,7 @@ import type { Message } from '@/types'
 import { useMarkdown } from '@/composables/useMarkdown'
 import { getAvatarUrl } from '@/utils/file'
 import MessageForm from './MessageForm.vue'
+import Icon from '@/components/common/Icon.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'

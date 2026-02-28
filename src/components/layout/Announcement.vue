@@ -9,11 +9,9 @@
       <div class="announcement-bar">
         <div class="container">
           <div class="announcement-content">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 640 640" fill="currentColor" class="announcement-icon">
-            <path d="M525.2 82.9C536.7 88 544 99.4 544 112L544 528C544 540.6 536.7 552 525.2 557.1C513.7 562.2 500.4 560.3 490.9 552L444.3 511.3C400.7 473.2 345.6 451 287.9 448.3L287.9 544C287.9 561.7 273.6 576 255.9 576L223.9 576C206.2 576 191.9 561.7 191.9 544L191.9 448C121.3 448 64 390.7 64 320C64 249.3 121.3 192 192 192L276.5 192C338.3 191.8 397.9 169.3 444.4 128.7L491 88C500.4 79.7 513.9 77.8 525.3 82.9zM288 384L288 384.2C358.3 386.9 425.8 412.7 480 457.6L480 182.3C425.8 227.2 358.3 253 288 255.7L288 384z"/>
-          </svg>
+          <Icon name="megaphone" :size="20" class="announcement-icon" />
 
-          <div class="announcement-slider">
+          <div class="announcement-slider" role="status" aria-live="polite">
             <transition-group name="slide-vertical">
               <div
                 v-for="(announcement, index) in announcements"
@@ -37,10 +35,7 @@
           </div>
 
           <button class="close-btn" @click="closeAnnouncement" title="关闭公告">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
+            <Icon name="close" :size="18" />
           </button>
         </div>
       </div>
@@ -53,6 +48,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { throttle } from '@/utils/throttle'
+import Icon from '@/components/common/Icon.vue'
 
 const appStore = useAppStore()
 const announcements = computed(() => appStore.announcements)
@@ -154,7 +150,7 @@ onBeforeUnmount(() => {
 /* 包装容器 - 用于实现折叠效果 */
 .announcement-wrapper {
   position: sticky;
-  top: 64px; /* 紧贴导航栏下方 */
+  top: var(--header-height); /* 紧贴导航栏下方 */
   z-index: 50;
   overflow: hidden;
   /* 使用 transform 实现高性能动画 */

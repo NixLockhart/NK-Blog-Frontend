@@ -12,26 +12,16 @@
         <header class="article-header">
           <h1 class="article-title">{{ article.title }}</h1>
           <div class="article-meta">
-            <span class="meta-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-              {{ formatDate(article.publishedAt) }}
+            <span class="meta-item" :title="displayDateTooltip">
+              <Icon name="calendar" :size="14" />
+              {{ displayDateText }}
             </span>
             <span class="meta-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
+              <Icon name="eye" :size="14" />
               {{ article.views }} 阅读
             </span>
             <span class="meta-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
+              <Icon name="comment" :size="14" />
               {{ article.commentCount }} 评论
             </span>
             <router-link v-if="article.categoryName" :to="`/articles?categoryId=${article.categoryId}`" class="category-tag">
@@ -51,9 +41,7 @@
         <!-- 文章操作 -->
         <div class="article-actions">
           <button class="action-btn like-btn" :class="{ liked: liked }" @click="handleLike">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
+            <Icon name="heart" :size="20" />
             <span>{{ article.likes }}</span>
           </button>
         </div>
@@ -84,6 +72,7 @@ import { getImageUrl } from '@/utils/file'
 import CommentList from '@/components/comment/CommentList.vue'
 import ArticleToc from '@/components/article/ArticleToc.vue'
 import ArticleDetailSkeleton from '@/components/skeleton/ArticleDetailSkeleton.vue'
+import Icon from '@/components/common/Icon.vue'
 import dayjs from 'dayjs'
 
 const route = useRoute()
@@ -110,6 +99,27 @@ const toc = computed(() => {
 const formatDate = (date: string) => {
   return dayjs(date).format('YYYY-MM-DD HH:mm')
 }
+
+const hasUpdatedAt = computed(() => {
+  if (!article.value?.updatedAt || !article.value?.publishedAt) return false
+  return dayjs(article.value.updatedAt).format('YYYY-MM-DD') !== dayjs(article.value.publishedAt).format('YYYY-MM-DD')
+})
+
+const displayDateText = computed(() => {
+  if (!article.value) return ''
+  if (hasUpdatedAt.value) {
+    return '更新于 ' + formatDate(article.value.updatedAt!)
+  }
+  return formatDate(article.value.publishedAt)
+})
+
+const displayDateTooltip = computed(() => {
+  if (!article.value) return ''
+  if (hasUpdatedAt.value) {
+    return '发布于 ' + formatDate(article.value.publishedAt)
+  }
+  return ''
+})
 
 const loadArticle = async () => {
   const id = Number(route.params.id)
@@ -159,7 +169,10 @@ onMounted(() => {
 .article-detail-page {
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-xl);
+  padding-top: var(--spacing-sm);
+  padding-right: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  padding-left: var(--spacing-xl);
 }
 
 .loading-state,
@@ -184,9 +197,15 @@ onMounted(() => {
 
 .article-content {
   background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
+  padding-top: var(--spacing-xl);
+  padding-right: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  padding-left: var(--spacing-xl);
   max-width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -294,7 +313,7 @@ onMounted(() => {
 
 .article-sidebar {
   position: sticky;
-  top: 96px; /* 导航栏高度64px + 间距32px */
+  top: calc(var(--header-height) + 32px);
   height: fit-content;
   align-self: start;
 }
@@ -311,7 +330,10 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .article-detail-page {
-    padding: 0 !important;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
     max-width: 100vw;
     width: 100%;
     overflow-x: hidden;
@@ -324,14 +346,17 @@ onMounted(() => {
   }
 
   .article-content {
-    padding: var(--spacing-base) var(--spacing-sm) !important;
+    padding-top: var(--spacing-base);
+    padding-right: var(--spacing-sm);
+    padding-bottom: var(--spacing-base);
+    padding-left: var(--spacing-sm);
     max-width: 100%;
     width: 100%;
     margin: 0;
     box-sizing: border-box;
     border-radius: 0;
-    border-left: none !important;
-    border-right: none !important;
+    border-left: none;
+    border-right: none;
   }
 
   .article-title {

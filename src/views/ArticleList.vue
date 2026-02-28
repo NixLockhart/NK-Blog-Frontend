@@ -1,13 +1,13 @@
 <template>
   <div class="article-list-page">
-    <div class="page-header">
-      <h1 class="page-title">{{ pageTitle }}</h1>
-      <span class="page-header-decoration"></span>
-      <p v-if="searchKeyword" class="page-subtitle">
-        搜索 "{{ searchKeyword }}" 的结果，共 {{ pagination.total }} 篇文章
-      </p>
-      <p v-else class="page-subtitle">共 {{ pagination.total }} 篇文章</p>
-    </div>
+    <PageHeader :title="pageTitle">
+      <template #subtitle>
+        <template v-if="searchKeyword">
+          搜索 "{{ searchKeyword }}" 的结果，共 {{ pagination.total }} 篇文章
+        </template>
+        <template v-else>共 {{ pagination.total }} 篇文章</template>
+      </template>
+    </PageHeader>
 
     <!-- 分类筛选 -->
     <div v-if="categories.length > 0" class="category-filter">
@@ -31,14 +31,14 @@
 
     <!-- 文章列表 -->
     <div v-if="loading" class="articles-grid">
-      <ArticleCardSkeleton v-for="i in 12" :key="i" />
+      <ArticleCardSkeleton v-for="i in 12" :key="i" variant="horizontal" />
     </div>
     <div v-else-if="articles.length === 0" class="empty-state">
       <p v-if="searchKeyword">没有找到你想看的哦(´・ω・`)</p>
       <p v-else>暂无文章</p>
     </div>
     <div v-else class="articles-grid">
-      <ArticleCard v-for="article in articles" :key="article.id" :article="article" />
+      <ArticleCard v-for="article in articles" :key="article.id" :article="article" variant="horizontal" />
     </div>
 
     <!-- 分页 -->
@@ -63,6 +63,7 @@
           </button>
         </template>
       </div>
+      <span class="pagination-mobile-info">{{ pagination.current }} / {{ totalPages }}</span>
       <button
         class="pagination-btn"
         :disabled="pagination.current === totalPages"
@@ -82,6 +83,7 @@ import { categoryApi } from '@/api/category'
 import type { Article, Category } from '@/types'
 import ArticleCard from '@/components/article/ArticleCard.vue'
 import ArticleCardSkeleton from '@/components/skeleton/ArticleCardSkeleton.vue'
+import PageHeader from '@/components/common/PageHeader.vue'
 
 const route = useRoute()
 
@@ -202,36 +204,6 @@ onMounted(() => {
   padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-xl);
 }
 
-.page-header {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-lg);
-}
-
-.page-title {
-  font-size: var(--text-3xl);
-  font-weight: 700;
-  color: var(--color-text);
-  margin: 0 0 var(--spacing-sm) 0;
-  letter-spacing: 0.02em;
-}
-
-.page-header-decoration {
-  display: block;
-  width: 40px;
-  height: 3px;
-  margin: 0 auto var(--spacing-sm);
-  border-radius: var(--radius-full);
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-}
-
-.page-subtitle {
-  font-size: var(--text-sm);
-  color: var(--color-text-tertiary);
-  margin: 0;
-  letter-spacing: 0.04em;
-}
-
 .category-filter {
   display: flex;
   flex-wrap: wrap;
@@ -264,8 +236,8 @@ onMounted(() => {
 
 .articles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: 1fr;
+  gap: var(--spacing-base);
   margin-bottom: var(--spacing-xl);
 }
 
@@ -332,6 +304,13 @@ onMounted(() => {
   user-select: none;
 }
 
+.pagination-mobile-info {
+  display: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 768px) {
   .article-list-page {
     padding: var(--spacing-base);
@@ -343,6 +322,10 @@ onMounted(() => {
 
   .pagination-pages {
     display: none;
+  }
+
+  .pagination-mobile-info {
+    display: block;
   }
 }
 </style>

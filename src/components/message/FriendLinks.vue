@@ -2,10 +2,7 @@
   <div class="friend-links" v-if="friendLinks.length > 0">
     <div class="friend-links-header">
       <h3 class="friend-links-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-        </svg>
+        <Icon name="link" :size="18" />
         友情链接
       </h3>
       <span class="friend-links-count">{{ friendLinks.length }} 位友邻</span>
@@ -24,17 +21,15 @@
             v-if="friend.avatar"
             :src="getAvatarUrl(friend.avatar)"
             :alt="friend.nickname"
+            width="40"
+            height="40"
           />
           <div v-else class="avatar-letter">{{ friend.nickname.charAt(0) }}</div>
         </div>
         <div class="friend-info">
           <div class="friend-nickname">{{ friend.nickname }}</div>
           <div class="friend-website">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15 3 21 3 21 9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
+            <Icon name="external-link" :size="12" />
             {{ formatWebsite(friend.blogUrl) }}
           </div>
         </div>
@@ -48,6 +43,7 @@ import { ref, onMounted } from 'vue'
 import { messageApi } from '@/api/message'
 import { getAvatarUrl } from '@/utils/file'
 import type { Message } from '@/types'
+import Icon from '@/components/common/Icon.vue'
 
 const friendLinks = ref<Message[]>([])
 const loading = ref(false)

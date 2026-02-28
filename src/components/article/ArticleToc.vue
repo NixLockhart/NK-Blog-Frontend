@@ -4,14 +4,7 @@
     <div class="article-toc">
       <div class="toc-header">
         <div class="toc-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="8" y1="6" x2="21" y2="6"/>
-            <line x1="8" y1="12" x2="21" y2="12"/>
-            <line x1="8" y1="18" x2="21" y2="18"/>
-            <line x1="3" y1="6" x2="3.01" y2="6"/>
-            <line x1="3" y1="12" x2="3.01" y2="12"/>
-            <line x1="3" y1="18" x2="3.01" y2="18"/>
-          </svg>
+          <Icon name="toc-list" :size="16" />
         </div>
         <h3 class="toc-title">目录</h3>
         <span class="toc-count">{{ tocItems.length }}</span>
@@ -44,11 +37,7 @@
     <div class="mobile-toc">
       <!-- 悬浮按钮 -->
       <button class="mobile-toc-btn" @click="toggleMobileToc" :class="{ active: showMobileToc }">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
+        <Icon name="menu" :size="20" />
       </button>
 
       <!-- 移动端目录列表 -->
@@ -57,23 +46,13 @@
           <div class="mobile-toc-header">
             <div class="mobile-toc-header-left">
               <div class="mobile-toc-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="8" y1="6" x2="21" y2="6"/>
-                  <line x1="8" y1="12" x2="21" y2="12"/>
-                  <line x1="8" y1="18" x2="21" y2="18"/>
-                  <line x1="3" y1="6" x2="3.01" y2="6"/>
-                  <line x1="3" y1="12" x2="3.01" y2="12"/>
-                  <line x1="3" y1="18" x2="3.01" y2="18"/>
-                </svg>
+                <Icon name="toc-list" :size="16" />
               </div>
               <h3 class="mobile-toc-title">目录</h3>
               <span class="mobile-toc-count">{{ tocItems.length }}</span>
             </div>
             <button class="mobile-toc-close" @click="closeMobileToc">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
+              <Icon name="close" :size="20" />
             </button>
           </div>
           <div class="mobile-toc-content">
@@ -112,6 +91,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { throttle } from '@/utils/throttle'
+import Icon from '@/components/common/Icon.vue'
 
 const props = defineProps<{
   toc: Array<{id: string, level: number, title: string}>

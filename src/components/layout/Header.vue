@@ -3,12 +3,13 @@
     <div class="container">
       <div class="header-content">
         <!-- 移动端菜单按钮 -->
-        <button class="mobile-menu-btn" @click="toggleMobileMenu" title="菜单">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
+        <button
+          class="mobile-menu-btn"
+          @click="toggleMobileMenu"
+          :aria-expanded="isMobileMenuOpen"
+          aria-controls="mobile-nav-menu"
+          aria-label="菜单">
+          <Icon name="menu" :size="24" />
         </button>
 
         <!-- Logo -->
@@ -33,26 +34,11 @@
             @click="toggleSearch"
             :tabindex="showSearchButton ? 0 : -1"
             title="搜索">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
+            <Icon name="search" :size="20" />
           </button>
           <button class="theme-toggle" @click="toggleTheme" :title="`切换到${theme === 'light' ? '暗色' : '亮色'}模式`">
-            <svg v-if="theme === 'light'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="5"/>
-              <line x1="12" y1="1" x2="12" y2="3"/>
-              <line x1="12" y1="21" x2="12" y2="23"/>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-              <line x1="1" y1="12" x2="3" y2="12"/>
-              <line x1="21" y1="12" x2="23" y2="12"/>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
+            <Icon v-if="theme === 'light'" name="sun" :size="20" />
+            <Icon v-else name="moon" :size="20" />
           </button>
         </div>
       </div>
@@ -76,8 +62,8 @@
 
     <!-- 移动端菜单抽屉 -->
     <transition name="slide">
-      <div v-if="isMobileMenuOpen" class="mobile-menu-overlay" @click="closeMobileMenu">
-        <nav class="mobile-nav" @click.stop>
+      <div v-if="isMobileMenuOpen" class="mobile-menu-overlay" @click="closeMobileMenu" @keydown.escape="closeMobileMenu">
+        <nav id="mobile-nav-menu" class="mobile-nav" role="navigation" aria-label="移动端导航" @click.stop>
           <router-link to="/" class="mobile-nav-item" @click="closeMobileMenu">首页</router-link>
           <router-link to="/articles" class="mobile-nav-item" @click="closeMobileMenu">文章</router-link>
           <router-link to="/message" class="mobile-nav-item" @click="closeMobileMenu">留言板</router-link>
@@ -90,10 +76,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { useThemeStore } from '@/stores/theme'
+import Icon from '@/components/common/Icon.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -135,6 +122,21 @@ const closeMobileMenu = () => {
   document.body.style.overflow = ''
 }
 
+// Escape 键关闭移动端菜单
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && isMobileMenuOpen.value) {
+    closeMobileMenu()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
+})
+
 const toggleSearch = () => {
   isSearchVisible.value = !isSearchVisible.value
   if (isSearchVisible.value) {
@@ -172,9 +174,11 @@ watch(() => route.path, () => {
   left: 0;
   right: 0;
   z-index: 100;
-  background-color: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  backdrop-filter: blur(10px);
+  background-color: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
   transition: var(--transition-base);
 }
 
@@ -182,7 +186,7 @@ watch(() => route.path, () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: var(--header-height);
   gap: var(--spacing-md);
 }
 
@@ -345,7 +349,7 @@ watch(() => route.path, () => {
 /* 移动端菜单 */
 .mobile-menu-overlay {
   position: fixed;
-  top: 64px;
+  top: var(--header-height);
   left: 0;
   right: 0;
   bottom: 0;

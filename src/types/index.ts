@@ -52,6 +52,7 @@ export interface ArticleDetail extends Article {
   content: string // 后端转换后的 HTML
   markdownContent: string // 原始 Markdown 内容
   toc: string
+  updatedAt?: string
 }
 
 // 分类类型

@@ -43,3 +43,11 @@ export const IS_DEV = import.meta.env.DEV
  * 生产模式
  */
 export const IS_PROD = import.meta.env.PROD
+
+/**
+ * 应用版本号
+ * 构建时从 git tag 自动注入
+ * 工作流：git tag v2.0.5-alpha → vite build → APP_VERSION = "v2.0.5-alpha"
+ */
+declare const __APP_VERSION__: string
+export const APP_VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'unknown'

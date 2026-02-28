@@ -5,13 +5,9 @@
       <div class="avatar-section">
         <label class="avatar-upload-label">
           <div class="avatar-box">
-            <img v-if="avatarPreview" :src="avatarPreview" alt="头像预览" class="avatar-preview" />
+            <img v-if="avatarPreview" :src="avatarPreview" alt="头像预览" class="avatar-preview" width="100" height="100" />
             <div v-else class="avatar-placeholder">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
+              <Icon name="upload" :size="24" />
             </div>
           </div>
           <input
@@ -70,6 +66,7 @@ import { ref } from 'vue'
 import { commentApi } from '@/api/comment'
 import request from '@/utils/request'
 import type { CommentCreateRequest } from '@/types'
+import Icon from '@/components/common/Icon.vue'
 
 const props = defineProps<{
   articleId: number
@@ -276,7 +273,7 @@ const handleSubmit = async () => {
 
 .input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .input::placeholder {
@@ -307,7 +304,7 @@ const handleSubmit = async () => {
 
 .textarea:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .textarea::placeholder {
@@ -322,7 +319,7 @@ const handleSubmit = async () => {
   font-size: var(--text-sm);
   font-weight: 500;
   color: #fff;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   border: none;
   border-radius: var(--radius-base);
   cursor: pointer;

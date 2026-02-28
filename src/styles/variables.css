@@ -65,6 +65,23 @@
   --transition-base: all 0.3s ease-in-out;
   --transition-fast: all 0.15s ease-in-out;
   --transition-slow: all 0.5s ease-in-out;
+
+  /* 毛玻璃效果（季节主题会覆盖） */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --glass-blur: blur(12px);
+
+  /* 布局 */
+  --header-height: 64px;
+
+  /* 焦点环 */
+  --color-focus-ring: rgba(59, 130, 246, 0.35);
+
+  /* 错误状态 */
+  --color-error-bg: #fee2e2;
+  --color-error-border: #fecaca;
+  --color-error-text: #dc2626;
 }
 
 /* 暗色主题 */
@@ -98,4 +115,21 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+
+  /* 毛玻璃效果（季节主题会覆盖） */
+  --glass-bg: rgba(17, 24, 39, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-blur: blur(12px);
+
+  /* 布局 */
+  --header-height: 64px;
+
+  /* 焦点环 */
+  --color-focus-ring: rgba(96, 165, 250, 0.35);
+
+  /* 错误状态 */
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+  --color-error-border: rgba(239, 68, 68, 0.2);
+  --color-error-text: #ef4444;
 }

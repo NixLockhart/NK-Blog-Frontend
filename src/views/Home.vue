@@ -1,15 +1,15 @@
 <template>
   <div class="home-page">
     <!-- 主内容区 -->
-    <div class="main-content" ref="mainContentRef">
+    <div class="main-content">
       <!-- 热门文章 -->
-      <section class="hot-articles section">
+      <section v-if="hotLoading || hotArticles.length > 0" class="hot-articles section">
         <h2 class="section-title">热门文章</h2>
         <div v-if="hotLoading" class="hot-articles-grid">
-          <ArticleCardSkeleton v-for="i in 3" :key="i" />
+          <ArticleCardSkeleton v-for="i in 3" :key="i" variant="overlay" />
         </div>
-        <div v-else-if="hotArticles.length > 0" class="hot-articles-grid">
-          <ArticleCard v-for="article in hotArticles" :key="article.id" :article="article" />
+        <div v-else class="hot-articles-grid">
+          <ArticleCard v-for="article in hotArticles" :key="article.id" :article="article" variant="overlay" />
         </div>
       </section>
 
@@ -21,20 +21,20 @@
         </div>
 
         <div v-if="loading" class="articles-grid">
-          <ArticleCardSkeleton v-for="i in 6" :key="i" />
+          <ArticleCardSkeleton v-for="i in 6" :key="i" variant="overlay" />
         </div>
         <div v-else-if="articles.length === 0" class="empty-state">
           <p>暂无文章</p>
         </div>
         <div v-else class="articles-grid">
-          <ArticleCard v-for="article in articles" :key="article.id" :article="article" />
+          <ArticleCard v-for="article in articles" :key="article.id" :article="article" variant="overlay" />
         </div>
       </section>
     </div>
 
     <!-- 侧边栏容器 -->
     <div class="sidebar-container">
-      <aside class="sidebar" ref="sidebarRef">
+      <aside class="sidebar">
         <!-- 动态加载的小工具 -->
         <div v-for="widget in appliedWidgets" :key="widget.id" class="widget">
           <DynamicWidget :widget="widget" />
@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted } from 'vue'
 import { articleApi } from '@/api/article'
 import { widgetApi } from '@/api/widget'
 import type { Article } from '@/types'
@@ -83,21 +83,6 @@ const loading = ref(false)
 const hotLoading = ref(false)
 const widgetsLoading = ref(false)
 const widgetsError = ref('')
-
-// DOM 引用
-const mainContentRef = ref<HTMLElement | null>(null)
-const sidebarRef = ref<HTMLElement | null>(null)
-
-// 更新侧边栏高度，使其与左侧内容高度一致
-const updateSidebarHeight = () => {
-  if (mainContentRef.value && sidebarRef.value) {
-    const mainHeight = mainContentRef.value.offsetHeight
-    sidebarRef.value.style.maxHeight = `${mainHeight}px`
-  }
-}
-
-// 创建 ResizeObserver 来监听内容高度变化
-let resizeObserver: ResizeObserver | null = null
 
 const loadArticles = async () => {
   loading.value = true
@@ -146,26 +131,6 @@ onMounted(() => {
   loadArticles()
   loadHotArticles()
   loadWidgets()
-
-  // 等待 DOM 渲染后设置 ResizeObserver
-  nextTick(() => {
-    if (mainContentRef.value) {
-      resizeObserver = new ResizeObserver(() => {
-        updateSidebarHeight()
-      })
-      resizeObserver.observe(mainContentRef.value)
-    }
-    // 初始设置高度
-    updateSidebarHeight()
-  })
-})
-
-onUnmounted(() => {
-  // 清理 ResizeObserver
-  if (resizeObserver) {
-    resizeObserver.disconnect()
-    resizeObserver = null
-  }
 })
 </script>
 
@@ -177,7 +142,7 @@ onUnmounted(() => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--spacing-xl) var(--spacing-sm);
-  align-items: start; /* 顶部对齐 */
+  align-items: stretch;
 }
 
 .main-content {
@@ -220,7 +185,7 @@ onUnmounted(() => {
   transform: translateY(-50%);
   width: 4px;
   height: 24px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   border-radius: 2px;
 }
 
@@ -267,15 +232,17 @@ onUnmounted(() => {
 }
 
 .error-state {
-  color: #e74c3c;
-  background-color: #fee;
-  border: 1px solid #fcc;
+  color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
 }
 
 .sidebar {
-  overflow-y: auto; /* 超出部分可滚动 */
+  position: sticky;
+  top: calc(var(--header-height) + var(--spacing-base));
+  max-height: calc(100vh - var(--header-height) - var(--spacing-lg));
+  overflow-y: auto;
   padding-right: var(--spacing-sm);
-  /* max-height 由 JavaScript 动态设置 */
 }
 
 /* 自定义滚动条样式 */
@@ -354,7 +321,7 @@ onUnmounted(() => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-base);
-    max-height: none !important; /* 移动端不限制高度 */
+    max-height: none;
     overflow-y: visible;
     padding-right: 0;
   }

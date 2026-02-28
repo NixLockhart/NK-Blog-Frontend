@@ -82,6 +82,24 @@ select {
   background-color: var(--color-text-tertiary);
 }
 
+/* 键盘焦点可见样式 */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--color-focus-ring);
+}
+
 /* 通用工具类 */
 .container {
   width: 100%;
@@ -180,7 +198,7 @@ select {
 .input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .textarea {
@@ -202,7 +220,7 @@ select {
 .textarea:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 /* 加载动画 */

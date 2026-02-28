@@ -5,12 +5,9 @@
       <!-- 头像上传 -->
       <label class="avatar-upload-label">
         <div class="avatar-upload-btn">
-          <img v-if="avatarPreview" :src="avatarPreview" alt="头像预览" class="avatar-preview" />
+          <img v-if="avatarPreview" :src="avatarPreview" alt="头像预览" class="avatar-preview" width="52" height="52" />
           <div v-else class="avatar-placeholder-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
+            <Icon name="user" :size="20" />
           </div>
           <span class="avatar-upload-hint">头像</span>
         </div>
@@ -64,10 +61,7 @@
           {{ form.content.length }} / 500
         </span>
         <button type="submit" class="submit-btn" :disabled="submitting">
-          <svg v-if="!submitting" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"/>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-          </svg>
+          <Icon v-if="!submitting" name="send" :size="16" />
           <span v-if="submitting" class="submit-spinner"></span>
           {{ submitting ? '发送中...' : '发表留言' }}
         </button>
@@ -81,6 +75,7 @@ import { ref } from 'vue'
 import { messageApi } from '@/api/message'
 import request from '@/utils/request'
 import type { MessageCreateRequest } from '@/types'
+import Icon from '@/components/common/Icon.vue'
 
 const emit = defineEmits<{
   messageAdded: []
@@ -197,7 +192,7 @@ const handleSubmit = async () => {
 
 .message-form:focus-within {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 /* ==================== 用户信息行 ==================== */
@@ -236,7 +231,7 @@ const handleSubmit = async () => {
 .avatar-upload-label:hover .avatar-placeholder-icon {
   border-color: var(--color-primary);
   color: var(--color-primary);
-  background-color: rgba(59, 130, 246, 0.05);
+  background-color: var(--color-bg-secondary);
 }
 
 .avatar-preview {
@@ -285,7 +280,7 @@ const handleSubmit = async () => {
 
 .form-input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 /* ==================== 内容输入区 ==================== */
@@ -318,7 +313,7 @@ const handleSubmit = async () => {
 
 .form-textarea:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 /* ==================== 底部栏 ==================== */

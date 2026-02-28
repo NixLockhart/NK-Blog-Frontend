@@ -1,12 +1,28 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import { execSync } from 'child_process'
+
+/**
+ * 从 git tag 获取版本号
+ * 工作流：git tag v2.0.5-alpha → vite build → __APP_VERSION__ 自动为 "v2.0.5-alpha"
+ */
+function getGitVersion(): string {
+  try {
+    return execSync('git describe --tags --abbrev=0').toString().trim()
+  } catch {
+    return 'unknown'
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue()
   ],
+  define: {
+    __APP_VERSION__: JSON.stringify(getGitVersion())
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
