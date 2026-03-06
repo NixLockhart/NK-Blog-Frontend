@@ -101,7 +101,10 @@ export function useMarkdown() {
     result = result.replace(/<table>/g, '<div class="table-wrapper"><table>')
     result = result.replace(/<\/table>/g, '</table></div>')
 
-    return DOMPurify.sanitize(result, { ADD_TAGS: ['iframe'], ADD_ATTR: ['target', 'rel'] })
+    return DOMPurify.sanitize(result, {
+      ADD_TAGS: ['iframe'],
+      ADD_ATTR: ['target', 'rel', 'src', 'width', 'height', 'style', 'frameborder', 'allow', 'allowfullscreen', 'loading']
+    })
   }
 
   /**
@@ -123,7 +126,10 @@ export function useMarkdown() {
     result = result.replace(/<table>/g, '<div class="table-wrapper"><table>')
     result = result.replace(/<\/table>/g, '</table></div>')
 
-    return DOMPurify.sanitize(result, { ADD_TAGS: ['iframe'], ADD_ATTR: ['target', 'rel'] })
+    return DOMPurify.sanitize(result, {
+      ADD_TAGS: ['iframe'],
+      ADD_ATTR: ['target', 'rel', 'src', 'width', 'height', 'style', 'frameborder', 'allow', 'allowfullscreen', 'loading']
+    })
   }
 
   /**

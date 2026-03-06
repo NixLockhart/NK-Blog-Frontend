@@ -1,38 +1,44 @@
 <template>
   <div id="app">
-    <!-- 跳过导航链接（无障碍） -->
-    <a href="#main-content" class="skip-to-content">跳到主要内容</a>
+    <!-- 后端不可用时显示维护页面 -->
+    <Maintenance v-if="appStore.backendDown" />
 
-    <!-- 头部（固定在顶部） -->
-    <Header />
+    <!-- 正常布局 -->
+    <template v-else>
+      <!-- 跳过导航链接（无障碍） -->
+      <a href="#main-content" class="skip-to-content">跳到主要内容</a>
 
-    <!-- 占位元素，为固定导航栏留出空间 -->
-    <div class="header-placeholder"></div>
+      <!-- 头部（固定在顶部） -->
+      <Header />
 
-    <!-- 公告栏 -->
-    <Announcement />
+      <!-- 占位元素，为固定导航栏留出空间 -->
+      <div class="header-placeholder"></div>
 
-    <!-- 主内容区 -->
-    <main class="main-content" id="main-content">
-      <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </main>
+      <!-- 公告栏 -->
+      <Announcement />
 
-    <!-- 底部 -->
-    <Footer />
+      <!-- 主内容区 -->
+      <main class="main-content" id="main-content">
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </main>
 
-    <!-- 回到顶部按钮 -->
-    <transition name="fade">
-      <button v-if="showBackToTop" class="back-to-top" @click="scrollToTop" title="回到顶部">
-        <Icon name="chevron-up" :size="24" />
-      </button>
-    </transition>
+      <!-- 底部 -->
+      <Footer />
 
-    <!-- AI助手 -->
-    <AIAssistant />
+      <!-- 回到顶部按钮 -->
+      <transition name="fade">
+        <button v-if="showBackToTop" class="back-to-top" @click="scrollToTop" title="回到顶部">
+          <Icon name="chevron-up" :size="24" />
+        </button>
+      </transition>
+
+      <!-- AI助手 -->
+      <AIAssistant />
+    </template>
   </div>
 </template>
 
@@ -45,6 +51,7 @@ import { throttle } from '@/utils/throttle'
 import Header from '@/components/layout/Header.vue'
 import Footer from '@/components/layout/Footer.vue'
 import Announcement from '@/components/layout/Announcement.vue'
+import Maintenance from '@/views/Maintenance.vue'
 import { AIAssistant } from '@/components/ai-assistant'
 import Icon from '@/components/common/Icon.vue'
 
