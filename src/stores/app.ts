@@ -19,6 +19,10 @@ export const useAppStore = defineStore('app', () => {
     if (!error.response && (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED')) {
       return true
     }
+    // 生产环境：Nginx 反向代理在后端不可用时返回 502/504
+    if (error.response && (error.response.status === 502 || error.response.status === 504)) {
+      return true
+    }
     return false
   }
 
@@ -39,18 +43,6 @@ export const useAppStore = defineStore('app', () => {
       }
     } finally {
       loading.value = false
-    }
-  }
-
-  /**
-   * 重新检测后端连通性
-   */
-  async function checkBackend() {
-    loaded.value = false
-    loading.value = false
-    await loadSiteConfig()
-    if (!backendDown.value) {
-      loadAnnouncements()
     }
   }
 
@@ -81,7 +73,6 @@ export const useAppStore = defineStore('app', () => {
     backendDown,
     loadSiteConfig,
     loadAnnouncements,
-    checkBackend,
     getConfig
   }
 })

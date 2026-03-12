@@ -100,7 +100,6 @@ const retry = () => {
 
 .maintenance-actions .btn {
   min-width: 140px;
-  gap: var(--spacing-sm);
 }
 
 .maintenance-hint {
@@ -118,16 +117,6 @@ const retry = () => {
 .contact-link:hover {
   opacity: 0.8;
   text-decoration: underline;
-}
-
-.spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
 }
 
 @keyframes float {
